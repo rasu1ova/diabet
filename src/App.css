@@ -1,0 +1,129 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+}
+.container {
+  width: 1230px;
+  margin: 0 auto;
+}
+#form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 75%;
+  margin: 5% auto;
+  border-radius: 12px;
+  box-shadow: 0px 15px 15px -10px rgba(16, 117, 0, 1);
+  padding: 100px;
+  border: 1px solid rgba(16, 117, 0, 0.3);
+}
+.labIn {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  margin: 8px 0;
+  justify-content: space-between;
+}
+
+.labIn input,
+select {
+  padding: 2px 12px;
+  font-size: 18px;
+  border: 2px solid green;
+  border-radius: 4px;
+  outline: none;
+  background: transparent;
+}
+.heading {
+  margin: 0 auto 12px auto;
+}
+.diseases {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.diseases input[type="checkbox"] {
+  padding: 5px;
+  position: relative;
+  appearance: none;
+  border: 2px solid green;
+}
+.diseases input[type="checkbox"]:checked {
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  background-color: green;
+}
+.checking {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.btn {
+  text-align: center;
+  margin: 32px auto 0 auto;
+}
+.noActive {
+  background: transparent;
+  opacity: 0.5;
+}
+#button {
+  padding: 4px 24px;
+  font-size: 18px;
+  border: 2px solid green;
+  border-radius: 4px;
+}
+.active {
+  background-color: rgba(0, 128, 0, 0.5);
+  opacity: 1;
+}
+.main {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.module {
+  border-radius: 12px;
+  box-shadow: 0px 15px 15px -10px rgba(16, 117, 0, 1);
+  padding: 50px;
+  border: 1px solid rgba(16, 117, 0, 0.3);
+  text-align: center;
+  position: relative;
+
+  margin: 0 auto;
+  background-color: #ffffff;
+  width: 50%;
+}
+@media screen and (max-width: 1230px) {
+  .container {
+    width: 90%;
+  }
+}
+@media screen and (max-width: 865px) {
+  #form {
+    padding: 50px;
+  }
+}
+@media screen and (max-width: 765px) {
+  .labIn {
+    flex-direction: column;
+    align-items: normal;
+    gap: 6px;
+  }
+  .checking {
+    align-items: baseline;
+  }
+}
+@media screen and (max-width: 595px) {
+  .labIn {
+    font-size: 18px;
+  }
+}
