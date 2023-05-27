@@ -52,10 +52,9 @@ function Diabet() {
     //   )
     // );
     fdata.map((tit) => {
-      tit=== id ?  tit.checked == true : tit
+      tit === id ? tit.checked == true : tit;
       console.log(tit.checked);
-    })
-   
+    });
   }
 
   const handleSubmit = () => {
@@ -171,7 +170,7 @@ function Diabet() {
                   pid={item.id}
                   diseaseName={item.name}
                   checked={item.checked}
-                  onClick={ handleCheckboxChange  }
+                  onClick={handleCheckboxChange}
                 />
               );
             })}
