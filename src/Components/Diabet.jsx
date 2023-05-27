@@ -13,7 +13,6 @@ function Diabet() {
   const [win, setWindow] = useState(false);
   const [active, setActive] = useState(false);
   const [data, setData] = useState([]);
-  const [isChecked, setIsChecked] = useState(false);
   useEffect(() => {
     if (
       fname.length > 0 &&
@@ -45,9 +44,22 @@ function Diabet() {
   const handleWeightChange = (event) => {
     setWeight(event.target.value);
   };
-
+  const [fdata, setFData] = useState(DiseasesName);
+  function handleCheckboxChange(id) {
+    // setFData((prevDiseases) =>
+    //   prevDiseases.map((disease) =>
+    //     disease.id === id ? { ...disease, checked: !disease.checked } : disease
+    //   )
+    // );
+    fdata.map((tit) => {
+      tit=== id ?  tit.checked == true : tit
+      console.log(tit.checked);
+    })
+   
+  }
 
   const handleSubmit = () => {
+    const selectedDiseases = fdata.filter((disease) => disease.checked);
     const formData = {
       lname: lname,
       fname: fname,
@@ -55,8 +67,12 @@ function Diabet() {
       weight: weight,
       gender: gender,
       heredity: heredity,
+      diseases: selectedDiseases.map((disease) => disease.name),
     };
-    setData(formData);
+    setData((prevData) => [...prevData, formData]);
+    setFData((prevDiseases) =>
+      prevDiseases.map((disease) => ({ ...disease, checked: false }))
+    );
     setWindow(true);
     console.log(formData);
     setFname("");
@@ -155,6 +171,7 @@ function Diabet() {
                   pid={item.id}
                   diseaseName={item.name}
                   checked={item.checked}
+                  onClick={ handleCheckboxChange  }
                 />
               );
             })}
