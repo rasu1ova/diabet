@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 
 import Diseases from "./Diseases";
 import DiseasesName from "./Data";
@@ -8,11 +8,13 @@ function Diabet() {
   const [fname, setFname] = useState("");
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
-  const [gender, setGender] = useState(null);
-  const [heredity, setHeredity] = useState(null);
+  const [gender, setGender] = useState("");
+  const [heredity, setHeredity] = useState("");
   const [win, setWindow] = useState(false);
   const [active, setActive] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({});
+  const [click, setClick] = useState(false);
+  const [fdata, setFData] = useState(DiseasesName);
   useEffect(() => {
     if (
       fname.length > 0 &&
@@ -44,21 +46,27 @@ function Diabet() {
   const handleWeightChange = (event) => {
     setWeight(event.target.value);
   };
-  const [fdata, setFData] = useState(DiseasesName);
-  function handleCheckboxChange(id) {
-    // setFData((prevDiseases) =>
-    //   prevDiseases.map((disease) =>
-    //     disease.id === id ? { ...disease, checked: !disease.checked } : disease
-    //   )
-    // );
-    fdata.map((tit) => {
-      tit === id ? tit.checked == true : tit;
-      console.log(tit.checked);
+  useEffect(() => {
+    setClick(false);
+    console.log("yangilandi");
+  }, [fdata]);
+  function handleCheckboxChange(Pid) {
+    setFData((prevData) => {
+      const filterData = prevData.map((chekitem) => {
+        if (Pid == chekitem.id) {
+          return { ...chekitem, checked: !chekitem.checked };
+        } else {
+          return chekitem;
+        }
+      });
+      console.log(fdata);
+      return filterData;
     });
+    setClick(true);
   }
 
   const handleSubmit = () => {
-    const selectedDiseases = fdata.filter((disease) => disease.checked);
+    // const selectedDiseases = fdata.filter((disease) => disease.checked);
     const formData = {
       lname: lname,
       fname: fname,
@@ -66,20 +74,18 @@ function Diabet() {
       weight: weight,
       gender: gender,
       heredity: heredity,
-      diseases: selectedDiseases.map((disease) => disease.name),
+      // diseases: selectedDiseases.map((disease) => disease.name),
     };
-    setData((prevData) => [...prevData, formData]);
-    setFData((prevDiseases) =>
-      prevDiseases.map((disease) => ({ ...disease, checked: false }))
-    );
+    // setData((prevData) => [...prevData, formData]);
+    setData(formData);
     setWindow(true);
-    console.log(formData);
+    console.log(data);
     setFname("");
     setLname("");
     setAge("");
     setWeight("");
-    setHeredity(null);
-    setGender(null);
+    setHeredity("");
+    setGender("");
   };
   return (
     <div>
@@ -162,18 +168,20 @@ function Diabet() {
             </select>
           </div>
           <div className="diseases">
-            {DiseasesName.map((item, index) => {
-              return (
-                <Diseases
-                  key={index}
-                  elem={item}
-                  pid={item.id}
-                  diseaseName={item.name}
-                  checked={item.checked}
-                  onClick={handleCheckboxChange}
-                />
-              );
-            })}
+            {!click &&
+              fdata.map((item, index) => {
+                return (
+                  <Diseases
+                    key={index}
+                    elem={item}
+                    pid={item.id}
+                    diseaseName={item.name}
+                    onClick={() => handleCheckboxChange(item.id)}
+                    checked={item.checked}
+                  />
+                );
+              })
+            }
           </div>
           <div className="btn">
             {/* <button id="button" className={active ? "active" : null }>
@@ -200,15 +208,12 @@ function Diabet() {
                 X
               </h2>
 
-              {/* {data &&
-                data.map((get) => (
-                  <>
-                    <h2>
-                      salom hurmarli bo`lishi mumkin bo`lgan{get.name}. sizda
-                      qand kasalligiga --% moyillik bor bo`lishi mumkin
-                    </h2>
-                  </>
-                ))} */}
+              {data && (
+                <h2>
+                  salom hurmatli bo`lishi mumkin bo`lgan{data.lname}. sizda qand
+                  kasalligiga --% moyillik bor bo`lishi mumkin
+                </h2>
+              )}
             </div>
           </div>
         )}
