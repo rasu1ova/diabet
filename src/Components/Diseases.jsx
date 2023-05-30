@@ -1,16 +1,11 @@
 import React from "react";
 
 function Diseases(props) {
-  const { pid, diseaseName, checked, onClick } = props;
+  const { diseaseName, checked, onClick, name, id } = props;
   return (
-    <label htmlFor="checkbox" className="checking" onClick={onClick}>
-      <input
-        type="checkbox"
-        name="checkbox"
-        id={pid}
-        defaultChecked={checked}
-      />
-      <span>{diseaseName}</span>
+    <label htmlFor={name + id} className="checking" onClick={onClick}>
+      <input type="checkbox" id={name + id} defaultChecked={checked} />
+      {diseaseName}
     </label>
   );
 }

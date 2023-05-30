@@ -8,13 +8,12 @@ function Diabet() {
   const [fname, setFname] = useState("");
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
-  const [gender, setGender] = useState("");
-  const [heredity, setHeredity] = useState("");
+  const [gender, setGender] = useState("Male");
+  const [heredity, setHeredity] = useState("Yes");
   const [win, setWindow] = useState(false);
   const [active, setActive] = useState(false);
   const [data, setData] = useState({});
-  const [click, setClick] = useState(false);
-  const [fdata, setFData] = useState(DiseasesName);
+  const [selectedValues, setSelectedValues] = useState([]);
   useEffect(() => {
     if (
       fname.length > 0 &&
@@ -46,23 +45,17 @@ function Diabet() {
   const handleWeightChange = (event) => {
     setWeight(event.target.value);
   };
-  useEffect(() => {
-    setClick(false);
-    console.log("yangilandi");
-  }, [fdata]);
-  function handleCheckboxChange(Pid) {
-    setFData((prevData) => {
-      const filterData = prevData.map((chekitem) => {
-        if (Pid == chekitem.id) {
-          return { ...chekitem, checked: !chekitem.checked };
-        } else {
-          return chekitem;
-        }
-      });
-      console.log(fdata);
-      return filterData;
-    });
-    setClick(true);
+  function handleCheckboxChange(value, checked) {
+    console.log(selectedValues);
+    if (checked) {
+      setSelectedValues([...selectedValues, value]);
+      console.log(value);
+      console.log(checked);
+    } else {
+      setSelectedValues(selectedValues.filter((val) => val !== value));
+      console.log(checked); 
+    }
+
   }
 
   const handleSubmit = () => {
@@ -76,16 +69,20 @@ function Diabet() {
       heredity: heredity,
       // diseases: selectedDiseases.map((disease) => disease.name),
     };
+    console.log(selectedValues);
     // setData((prevData) => [...prevData, formData]);
     setData(formData);
     setWindow(true);
-    console.log(data);
+    console.log(formData);
+    console.log(heredity);
     setFname("");
     setLname("");
     setAge("");
     setWeight("");
     setHeredity("");
     setGender("");
+    console.log(data);
+  
   };
   return (
     <div>
@@ -168,20 +165,21 @@ function Diabet() {
             </select>
           </div>
           <div className="diseases">
-            {!click &&
-              fdata.map((item, index) => {
-                return (
-                  <Diseases
-                    key={index}
-                    elem={item}
-                    pid={item.id}
-                    diseaseName={item.name}
-                    onClick={() => handleCheckboxChange(item.id)}
-                    checked={item.checked}
-                  />
-                );
-              })
-            }
+            {DiseasesName.map((item) => {
+              return (
+                <Diseases
+                  key={item.id}
+                  elem={item}
+                  diseaseName={item.name}
+                  name={item.name.substring(0,3)}
+                  id={item.id}
+                  onClick={(e) =>
+                    handleCheckboxChange(item.name, e.target.checked)
+                  }
+                  checked={selectedValues.includes(item.name)}
+                />
+              );
+            })}
           </div>
           <div className="btn">
             {/* <button id="button" className={active ? "active" : null }>
@@ -209,10 +207,13 @@ function Diabet() {
               </h2>
 
               {data && (
-                <h2>
-                  salom hurmatli bo`lishi mumkin bo`lgan{data.lname}. sizda qand
-                  kasalligiga --% moyillik bor bo`lishi mumkin
-                </h2>
+                <>
+                  <h2>
+                    salom hurmatli bo`lishi mumkin bo`lgan {data.lname}. sizda
+                    qand kasalligiga --% moyillik bor bo`lishi mumkin
+                  </h2>
+                  <p>Selected values: {selectedValues.join(", ")}</p>
+                </>
               )}
             </div>
           </div>
