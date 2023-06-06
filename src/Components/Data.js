@@ -1,54 +1,40 @@
 const DiseasesName = [
   {
     id: 1,
-    name: "feeling very thirsty",
+    name: "Chanqash",
     checked: false,
+    percent : 3,
   },
   {
     id: 2,
-    name: "needing to urinate more often than usual",
+    name: "Tez peshob ajralishi",
     checked: false,
+    percent : 3,
   },
   {
     id: 3,
-    name: "blurred vision",
+    name: "Holdan toyish",
     checked: false,
+    percent : 5,
   },
   {
     id: 4,
-    name: "feeling tired",
+    name: "Terining qurishi va qichishi ",
     checked: false,
+    percent : 5,
   },
   {
     id: 5,
-    name: "losing weight unintentionally",
+    name: "Yaralarning sekin bitishi",
     checked: false,
+    percent : 5,
   },
   {
     id: 6,
-    name: "Urinate (pee) a lot, often at night.",
+    name: "Vazn va ishtaxaning ortishi",
     checked: false,
-  },
-  {
-    id: 7,
-    name: "Have numb or tingling hands or feet.",
-    checked: false,
-  },
-  {
-    id: 8,
-    name: "Have very dry skin",
-    checked: false,
-  },
-  {
-    id: 9,
-    name: "Have blurry vision.",
-    checked: false,
-  },
-  {
-    id: 10,
-    name: "Have more infections than usual",
-    checked: false,
-  },
+    percent : 6,
+  }
 ];
 
 export default DiseasesName;

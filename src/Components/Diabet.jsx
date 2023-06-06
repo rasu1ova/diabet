@@ -13,24 +13,20 @@ function Diabet() {
   const [win, setWindow] = useState(false);
   const [active, setActive] = useState(false);
   const [data, setData] = useState({});
+  const [height, setHeight] = useState("");
   const [selectedValues, setSelectedValues] = useState([]);
-  useEffect(() => {
-    if (
-      fname.length > 0 &&
-      lname.length > 0 &&
-      weight.length > 0 &&
-      age.length > 0
-    ) {
-      setActive(true);
-    } else setActive(false);
-  }, [lname, fname, age, weight, gender]);
+  const [tui, setTui] = useState(0);
+  const [percent, setPercent] = useState(0);
+  const [symptoms, setSymptoms] = useState("");
+  const [obesity, setObesity] = useState("");
+  const [qwert, setQwert] = useState([]);
+
+  let summ = 0;
+  let symptomsPercent = [];
   const handleGenderChange = (event) => {
     setGender(event.target.value);
   };
 
-  const handleHeredityChange = (event) => {
-    setHeredity(event.target.value);
-  };
   const handleNameChange = (event) => {
     setFname(event.target.value);
   };
@@ -42,48 +38,167 @@ function Diabet() {
     setAge(event.target.value);
   };
 
-  const handleWeightChange = (event) => {
-    setWeight(event.target.value);
+  const handleHeredityChange = (event) => {
+    setHeredity(event.target.value);
   };
-  function handleCheckboxChange(value, checked) {
-    console.log(selectedValues);
+  const handleWeightChange = (event) => {
+    setWeight(Number(event.target.value));
+  };
+  const handleHeightChange = (event) => {
+    setHeight(Number(event.target.value));
+  };
+
+  function handleCheckboxChange(value, checked, diseasePercent) {
+    // extraPercent += diseasePercent;
     if (checked) {
+      console.log(diseasePercent);
       setSelectedValues([...selectedValues, value]);
-      console.log(value);
-      console.log(checked);
     } else {
       setSelectedValues(selectedValues.filter((val) => val !== value));
-      console.log(checked); 
+      // setQwert(qwert.filter((get) => get !== diseasePercent));
     }
-
+    console.log(percent, "inputchalar");
+    // symptomsPercent.push(diseasePercent);
+    // console.log(symptomsPercent);
+    // const sum = symptomsPercent.reduce(
+    //   (acc, current) => acc + current,
+    //   diseasePercent
+    // );
+    // console.log(sum);
+    // console.log(qwert, "qwert");
   }
 
+  // console.log(qwert);
+  // console.log(symptomsPercent, "symptoms");
+  useEffect(() => {
+    console.log("tuini hisoblash", percent);
+    let tuiHeight = height * 0.01;
+    let wert = weight / (tuiHeight * tuiHeight);
+    let qwer = wert.toFixed(1);
+    setTui(Number(qwer));
+  }, [height, weight]);
+  useEffect(() => {
+    let extraPercent = 0;
+    console.log("preeffect tui", percent);
+    if (tui >= 23.0 && tui < 24.9) {
+      setObesity("o`rtacha vazn");
+      extraPercent += 2;
+      console.log("2% vazn un qo'shildi");
+    } else if (tui > 25.0 && tui < 29.9) {
+      setObesity("ortiqcha vazn");
+      extraPercent += 6;
+      console.log("6% vazn un qo'shildi");
+    } else if (tui >= 30.0 && tui < 34.9) {
+      setObesity("semizlikning 1-darajasi");
+      extraPercent += 10;
+      console.log("10% vazn un qo'shildi");
+    } else if (tui >= 35.0 && tui <= 35.9) {
+      setObesity("semizlikning 2-darajasi");
+      extraPercent += 15;
+      console.log("15% vazn un qo'shildi");
+    }
+    // else if (tui > 40.0) {
+    //   setObesity("semizlikning 3-darajasi");
+    //   extraPercent += 20;
+    //   console.log("20% vazn un qo'shildi");
+    // }
+    console.log("tui", tui);
+    console.log("exit", extraPercent);
+    setPercent(percent + extraPercent);
+    console.log("exitni pasti", extraPercent);
+    console.log(percent, "vazn ichidada");
+  }, [tui]);
+
+  // useEffect(() => {
+  //   console.log("symptoms", percent);
+  //   if (percent >= 40) {
+  //     setSymptoms(`Sog'lom turmush tarziga rioya qiling`);
+  //     console.log(symptoms);
+  //   } else if (percent >= 41 && percent < 50) {
+  //     setSymptoms(
+  //       `Parhez va jismoniy faollik (kuniga 5000 yoki 10000 qadam yurish)`
+  //     );
+  //   } else if (percent >= 51 && percent < 60) {
+  //     setSymptoms(`Qon tahlili , hududdagi shifokor ko'ruvi `);
+  //   } else if (percent > 60) {
+  //     setSymptoms(`Endokrinolog ko'ruvi`);
+  //   } else {
+  //     console.log("symptoms oxiri");
+  //   }
+  // }, [percent]);
+
+
+  
+  useEffect(() => {
+    if (
+      // fname !== "" &&
+      // lname !== "" &&
+      weight !== "" &&
+      height !== "" &&
+      age !== "" &&
+      heredity !== ""
+    ) {
+      setActive(true);
+    } else {
+      setActive(false);
+    }
+  }, [lname, fname, age, weight, gender, height]);
   const handleSubmit = () => {
-    // const selectedDiseases = fdata.filter((disease) => disease.checked);
+    let extraPercent = 0;
+    console.log(percent, "percent submit ichidagi");
     const formData = {
       lname: lname,
       fname: fname,
       age: age,
       weight: weight,
+      height: height,
       gender: gender,
       heredity: heredity,
-      // diseases: selectedDiseases.map((disease) => disease.name),
     };
-    console.log(selectedValues);
-    // setData((prevData) => [...prevData, formData]);
+
+    if (heredity === "Yes") {
+      extraPercent = 9;
+      console.log("yes", "9%");
+    }
+    if (heredity === "Now") {
+      extraPercent = 0;
+      console.log("now", "0%");
+    }
+    if (gender === "Male") {
+      extraPercent = 4;
+      console.log("mal", "4%");
+    }
+    if (gender === "Female") {
+      extraPercent = 2;
+      console.log("female", "2%");
+    }
+    if (age >= 40 && age < 65) {
+      extraPercent = 6;
+      console.log("6% yosh un qo'shildi");
+    }
+    if (age > 65) {
+      extraPercent = 10;
+      console.log("10% yosh un qo'shildi");
+    } else {
+      console.log(extraPercent + "%");
+    }
+    console.log("out", extraPercent);
+    console.log(qwert);
+    setPercent(percent + extraPercent);
     setData(formData);
     setWindow(true);
-    console.log(formData);
-    console.log(heredity);
-    setFname("");
-    setLname("");
-    setAge("");
-    setWeight("");
-    setHeredity("");
-    setGender("");
-    console.log(data);
-  
   };
+  // useEffect(() => {
+  //   if (window === false) {
+  //     setFname("");
+  //     setLname("");
+  //     setAge("");
+  //     setWeight("");
+  //     setHeredity("");
+  //     setHeight("");
+  //     setGender("");
+  //   }
+  // }, []);
   return (
     <div>
       <div className="container">
@@ -120,7 +235,7 @@ function Diabet() {
           <label htmlFor="age" className="labIn">
             <span>Age</span>
             <input
-              type="text"
+              type="number"
               value={age}
               onChange={handleAgeChange}
               name="age"
@@ -150,6 +265,23 @@ function Diabet() {
               placeholder="weight"
             />
           </label>
+          <label htmlFor="height" className="labIn">
+            <span>Height</span>
+            <input
+              type="number"
+              value={height}
+              onChange={handleHeightChange}
+              name="height"
+              id=""
+              placeholder="height"
+            />
+          </label>
+          <div className="labIn">
+            <span>TUI: </span>
+            <div>
+              {tui ? <div>{tui}</div> : 0} % -{obesity}
+            </div>
+          </div>
           <div className="heredity labIn">
             <label htmlFor="heredity">
               Do you have a family history of diabetes?
@@ -161,7 +293,6 @@ function Diabet() {
               onChange={handleHeredityChange}>
               <option value="yes">Yes</option>
               <option value="now">Now</option>
-              <option value="i don't know">i don;t know</option>
             </select>
           </div>
           <div className="diseases">
@@ -171,10 +302,17 @@ function Diabet() {
                   key={item.id}
                   elem={item}
                   diseaseName={item.name}
-                  name={item.name.substring(0,3)}
+                  name={item.name.substring(0, 3)}
                   id={item.id}
+                  diseasePercent={item.percent}
                   onClick={(e) =>
-                    handleCheckboxChange(item.name, e.target.checked)
+                    handleCheckboxChange(
+                      item.name,
+
+                      e.target.checked,
+                      item.percent,
+                      item.id
+                    )
                   }
                   checked={selectedValues.includes(item.name)}
                 />
@@ -182,7 +320,7 @@ function Diabet() {
             })}
           </div>
           <div className="btn">
-            {/* <button id="button" className={active ? "active" : null }>
+            {/* <button id="button" className={active ? "active" : null}>
               {active ? "Send✔️" : "Back❌"}
             </button> */}
             {active ? (
@@ -203,18 +341,22 @@ function Diabet() {
                 onClick={() => {
                   setWindow(false);
                 }}>
-                X
+                ❌
               </h2>
-
-              {data && (
-                <>
-                  <h2>
-                    salom hurmatli bo`lishi mumkin bo`lgan {data.lname}. sizda
-                    qand kasalligiga --% moyillik bor bo`lishi mumkin
-                  </h2>
-                  <p>Selected values: {selectedValues.join(", ")}</p>
-                </>
-              )}
+              <br />
+              <h2>
+                Salom 👋🏻 {data.lname}. <br /> Sizda
+                {percent < 10 ? (
+                  <span>
+                    oshqozon osti bezi insulin ishlab chiqarilishining buzilishi{" "}
+                    {percent}%
+                  </span>
+                ) : (
+                  <span>qandli diabetga chalinish ehtimoli {percent}%</span>
+                )}
+                <br />
+                <span>{symptoms}</span>
+              </h2>
             </div>
           </div>
         )}

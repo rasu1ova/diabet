@@ -101,7 +101,7 @@ select {
 
   margin: 0 auto;
   background-color: #ffffff;
-  width: 50%;
+  width: 45%;
 }
 @media screen and (max-width: 1230px) {
   .container {
@@ -127,4 +127,49 @@ select {
   .labIn {
     font-size: 18px;
   }
+}
+.django{
+  margin: 50px auto;
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.card--content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap:24px 10px ;
+}
+.card {
+  width: 400px;
+  padding: 24px;
+  box-shadow: 0px 15px 15px -10px rgba(16, 117, 0, 1);
+  border: 1px solid rgba(16, 117, 0, 0.1);
+  border-radius: 10px;
+}
+.card--img {
+  width: 100%;
+  height: 300px;
+  margin: 0 0 12px 0;
+}
+.price {
+  margin: 12px 0;
+}
+.card--img img {
+  width: 100%;
+  height: 100%;
+}
+.info {
+  color: grey;
+  font-weight: 900;
+  font-family: cursive;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+p{
+  font-size: 34px;
 }
