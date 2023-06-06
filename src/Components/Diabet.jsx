@@ -8,8 +8,8 @@ function Diabet() {
   const [fname, setFname] = useState("");
   const [age, setAge] = useState("");
   const [weight, setWeight] = useState("");
-  const [gender, setGender] = useState("Male");
-  const [heredity, setHeredity] = useState("Yes");
+  const [gender, setGender] = useState("male");
+  const [heredity, setHeredity] = useState("now");
   const [win, setWindow] = useState(false);
   const [active, setActive] = useState(false);
   const [data, setData] = useState({});
@@ -19,10 +19,9 @@ function Diabet() {
   const [percent, setPercent] = useState(0);
   const [symptoms, setSymptoms] = useState("");
   const [obesity, setObesity] = useState("");
-  const [qwert, setQwert] = useState([]);
+  const [qwert, setQwert] = useState(0);
+  const [util, setUtil] = useState(0);
 
-  let summ = 0;
-  let symptomsPercent = [];
   const handleGenderChange = (event) => {
     setGender(event.target.value);
   };
@@ -36,6 +35,14 @@ function Diabet() {
   };
   const handleAgeChange = (event) => {
     setAge(event.target.value);
+    let extraPercent = 0;
+    if (age >= 40 && age < 65) {
+      extraPercent = 6;
+    } else if (age > 65) {
+      extraPercent = 10;
+    } else {
+    }
+    setQwert(extraPercent);
   };
 
   const handleHeredityChange = (event) => {
@@ -68,71 +75,59 @@ function Diabet() {
     // console.log(qwert, "qwert");
   }
 
-  // console.log(qwert);
-  // console.log(symptomsPercent, "symptoms");
   useEffect(() => {
-    console.log("tuini hisoblash", percent);
     let tuiHeight = height * 0.01;
     let wert = weight / (tuiHeight * tuiHeight);
     let qwer = wert.toFixed(1);
     setTui(Number(qwer));
   }, [height, weight]);
+
   useEffect(() => {
-    let extraPercent = 0;
-    console.log("preeffect tui", percent);
-    if (tui >= 23.0 && tui < 24.9) {
-      setObesity("o`rtacha vazn");
-      extraPercent += 2;
-      console.log("2% vazn un qo'shildi");
-    } else if (tui > 25.0 && tui < 29.9) {
-      setObesity("ortiqcha vazn");
-      extraPercent += 6;
-      console.log("6% vazn un qo'shildi");
-    } else if (tui >= 30.0 && tui < 34.9) {
-      setObesity("semizlikning 1-darajasi");
-      extraPercent += 10;
-      console.log("10% vazn un qo'shildi");
-    } else if (tui >= 35.0 && tui <= 35.9) {
-      setObesity("semizlikning 2-darajasi");
-      extraPercent += 15;
-      console.log("15% vazn un qo'shildi");
+    let extraPercent1 = 0;
+
+    if (tui !== NaN) {
+      if (tui >= 23.0 && tui < 24.9) {
+        setObesity("o`rtacha vazn");
+        extraPercent1 = 2;
+      } else if (tui > 25.0 && tui < 29.9) {
+        setObesity("ortiqcha vazn");
+        extraPercent1 = 6;
+      } else if (tui >= 30.0 && tui < 34.9) {
+        setObesity("semizlikning 1-darajasi");
+        extraPercent1 = 10;
+      } else if (tui >= 35.0 && tui <= 35.9) {
+        setObesity("semizlikning 2-darajasi");
+        extraPercent1 = 15;
+      } else if (tui > 40.0) {
+        extraPercent1 = 20;
+        setObesity("semizlikning 3-darajasi");
+      }
+      setUtil(extraPercent1);
     }
-    // else if (tui > 40.0) {
-    //   setObesity("semizlikning 3-darajasi");
-    //   extraPercent += 20;
-    //   console.log("20% vazn un qo'shildi");
-    // }
-    console.log("tui", tui);
-    console.log("exit", extraPercent);
-    setPercent(percent + extraPercent);
-    console.log("exitni pasti", extraPercent);
-    console.log(percent, "vazn ichidada");
   }, [tui]);
+  console.log(percent, "salom");
+  useEffect(() => {
+    console.log("symptoms", percent);
+    if (percent >= 40) {
+      setSymptoms(`Sog'lom turmush tarziga rioya qiling`);
+      console.log(symptoms);
+    } else if (percent >= 41 && percent < 50) {
+      setSymptoms(
+        `Parhez va jismoniy faollik (kuniga 5000 yoki 10000 qadam yurish)`
+      );
+    } else if (percent >= 51 && percent < 60) {
+      setSymptoms(`Qon tahlili , hududdagi shifokor ko'ruvi `);
+    } else if (percent > 60) {
+      setSymptoms(`Endokrinolog ko'ruvi`);
+    } else {
+      console.log("symptoms oxiri");
+    }
+  }, [percent]);
 
-  // useEffect(() => {
-  //   console.log("symptoms", percent);
-  //   if (percent >= 40) {
-  //     setSymptoms(`Sog'lom turmush tarziga rioya qiling`);
-  //     console.log(symptoms);
-  //   } else if (percent >= 41 && percent < 50) {
-  //     setSymptoms(
-  //       `Parhez va jismoniy faollik (kuniga 5000 yoki 10000 qadam yurish)`
-  //     );
-  //   } else if (percent >= 51 && percent < 60) {
-  //     setSymptoms(`Qon tahlili , hududdagi shifokor ko'ruvi `);
-  //   } else if (percent > 60) {
-  //     setSymptoms(`Endokrinolog ko'ruvi`);
-  //   } else {
-  //     console.log("symptoms oxiri");
-  //   }
-  // }, [percent]);
-
-
-  
   useEffect(() => {
     if (
-      // fname !== "" &&
-      // lname !== "" &&
+      fname !== "" &&
+      lname !== "" &&
       weight !== "" &&
       height !== "" &&
       age !== "" &&
@@ -144,7 +139,6 @@ function Diabet() {
     }
   }, [lname, fname, age, weight, gender, height]);
   const handleSubmit = () => {
-    let extraPercent = 0;
     console.log(percent, "percent submit ichidagi");
     const formData = {
       lname: lname,
@@ -155,48 +149,35 @@ function Diabet() {
       gender: gender,
       heredity: heredity,
     };
-
-    if (heredity === "Yes") {
-      extraPercent = 9;
-      console.log("yes", "9%");
-    }
-    if (heredity === "Now") {
-      extraPercent = 0;
-      console.log("now", "0%");
-    }
-    if (gender === "Male") {
-      extraPercent = 4;
-      console.log("mal", "4%");
-    }
-    if (gender === "Female") {
-      extraPercent = 2;
-      console.log("female", "2%");
-    }
-    if (age >= 40 && age < 65) {
-      extraPercent = 6;
-      console.log("6% yosh un qo'shildi");
-    }
-    if (age > 65) {
-      extraPercent = 10;
-      console.log("10% yosh un qo'shildi");
-    } else {
-      console.log(extraPercent + "%");
-    }
-    console.log("out", extraPercent);
-    console.log(qwert);
-    setPercent(percent + extraPercent);
     setData(formData);
+
+    let extraPercent = 0;
+    if (heredity !== "now") {
+      extraPercent += 9;
+    }
+    if (heredity !== "yes") {
+      extraPercent += 0;
+    }
+    if (gender === "male") {
+      extraPercent += 4;
+    }
+    if (gender === "female") {
+      extraPercent += 2;
+    }
+
+    setPercent(percent + extraPercent);
     setWindow(true);
+    setFname("");
+    setLname("");
+    setAge("");
+    setWeight("");
+    setHeredity("");
+    setHeight("");
+    setGender("");
   };
   // useEffect(() => {
   //   if (window === false) {
-  //     setFname("");
-  //     setLname("");
-  //     setAge("");
-  //     setWeight("");
-  //     setHeredity("");
-  //     setHeight("");
-  //     setGender("");
+  //
   //   }
   // }, []);
   return (
@@ -209,90 +190,90 @@ function Diabet() {
             e.preventDefault();
             handleSubmit();
           }}>
-          <h1 className="heading">Diabetes Prognosis</h1>
+          <h1 className="heading">Qandli diabet prognozi</h1>
           <label htmlFor="fname" className="labIn">
-            <span>Name</span>
+            <span>Ism:</span>
             <input
               type="text"
               value={fname}
               onChange={handleNameChange}
               name="fname"
               id="fname"
-              placeholder="Name"
+              placeholder="Ism kiriting..."
             />
           </label>
           <label htmlFor="lname" className="labIn">
-            <span>Last Name</span>
+            <span>Familya:</span>
             <input
               type="text"
               value={lname}
               onChange={handleLnameChange}
               name="lname"
               id="lname"
-              placeholder="Last Name"
+              placeholder="Familya kiriting..."
             />
           </label>
           <label htmlFor="age" className="labIn">
-            <span>Age</span>
+            <span>Yosh:</span>
             <input
               type="number"
               value={age}
               onChange={handleAgeChange}
               name="age"
               id="age"
-              placeholder="Age"
+              placeholder="Yosh kiriting..."
             />
           </label>
           <div className="gender labIn">
-            <label htmlFor="gender">Gender:</label>
+            <label htmlFor="gender">Jins:</label>
             <select
               name="gender"
               id=""
               value={gender}
               onChange={handleGenderChange}>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
+              <option value="male">Erkak</option>
+              <option value="female">Ayol</option>
             </select>
           </div>
           <label htmlFor="weight" className="labIn">
-            <span>Weight</span>
+            <span>Vazn:</span>
             <input
               type="number"
               value={weight}
               onChange={handleWeightChange}
               name="weight"
               id=""
-              placeholder="weight"
+              placeholder="Vazn kiriting..."
             />
           </label>
           <label htmlFor="height" className="labIn">
-            <span>Height</span>
+            <span>Bo'y:</span>
             <input
               type="number"
               value={height}
               onChange={handleHeightChange}
               name="height"
               id=""
-              placeholder="height"
+              placeholder="Bo'y kiriting..."
             />
           </label>
           <div className="labIn">
             <span>TUI: </span>
             <div>
-              {tui ? <div>{tui}</div> : 0} % -{obesity}
+              {tui ? <span>{tui}</span> : 0}% {obesity}
             </div>
           </div>
           <div className="heredity labIn">
             <label htmlFor="heredity">
-              Do you have a family history of diabetes?
+              Oilangizda qandli diabetga chalingalar bormi?
             </label>
             <select
               name="heredity"
               id=""
               value={heredity}
               onChange={handleHeredityChange}>
-              <option value="yes">Yes</option>
-              <option value="now">Now</option>
+              <option value="noooooooooooooow">Yo'q</option>
+              <option value="yeeeees">Ha</option>
             </select>
           </div>
           <div className="diseases">
@@ -308,7 +289,6 @@ function Diabet() {
                   onClick={(e) =>
                     handleCheckboxChange(
                       item.name,
-
                       e.target.checked,
                       item.percent,
                       item.id
@@ -325,11 +305,11 @@ function Diabet() {
             </button> */}
             {active ? (
               <button id="button" className="active">
-                Send✔️
+                Yuborish✔️
               </button>
             ) : (
               <button id="button" className="noActive" disabled>
-                Back✔️
+                Yopish❌
               </button>
             )}
           </div>
@@ -348,11 +328,13 @@ function Diabet() {
                 Salom 👋🏻 {data.lname}. <br /> Sizda
                 {percent < 10 ? (
                   <span>
-                    oshqozon osti bezi insulin ishlab chiqarilishining buzilishi{" "}
-                    {percent}%
+                    oshqozon osti bezi insulin ishlab chiqarilishining buzilishi
+                    {percent + qwert + util}%
                   </span>
                 ) : (
-                  <span>qandli diabetga chalinish ehtimoli {percent}%</span>
+                  <span>
+                    qandli diabetga chalinish ehtimoli {percent + qwert + util}%
+                  </span>
                 )}
                 <br />
                 <span>{symptoms}</span>
