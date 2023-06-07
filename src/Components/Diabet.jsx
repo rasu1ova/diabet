@@ -19,7 +19,6 @@ function Diabet() {
   const [percent, setPercent] = useState(0);
   const [symptoms, setSymptoms] = useState("");
   const [obesity, setObesity] = useState("");
-  const [qwert, setQwert] = useState(0);
   const [util, setUtil] = useState(0);
 
   const handleGenderChange = (event) => {
@@ -35,14 +34,6 @@ function Diabet() {
   };
   const handleAgeChange = (event) => {
     setAge(event.target.value);
-    let extraPercent = 0;
-    if (age >= 40 && age < 65) {
-      extraPercent = 6;
-    } else if (age > 65) {
-      extraPercent = 10;
-    } else {
-    }
-    setQwert(extraPercent);
   };
 
   const handleHeredityChange = (event) => {
@@ -56,23 +47,12 @@ function Diabet() {
   };
 
   function handleCheckboxChange(value, checked, diseasePercent) {
-    // extraPercent += diseasePercent;
     if (checked) {
       console.log(diseasePercent);
       setSelectedValues([...selectedValues, value]);
     } else {
       setSelectedValues(selectedValues.filter((val) => val !== value));
-      // setQwert(qwert.filter((get) => get !== diseasePercent));
     }
-    console.log(percent, "inputchalar");
-    // symptomsPercent.push(diseasePercent);
-    // console.log(symptomsPercent);
-    // const sum = symptomsPercent.reduce(
-    //   (acc, current) => acc + current,
-    //   diseasePercent
-    // );
-    // console.log(sum);
-    // console.log(qwert, "qwert");
   }
 
   useEffect(() => {
@@ -85,42 +65,52 @@ function Diabet() {
   useEffect(() => {
     let extraPercent1 = 0;
 
-    if (tui !== NaN) {
+    if (tui !== "NaN") {
       if (tui >= 23.0 && tui < 24.9) {
         setObesity("o`rtacha vazn");
         extraPercent1 = 2;
+        setUtil(extraPercent1);
       } else if (tui > 25.0 && tui < 29.9) {
         setObesity("ortiqcha vazn");
         extraPercent1 = 6;
+        setUtil(extraPercent1);
       } else if (tui >= 30.0 && tui < 34.9) {
         setObesity("semizlikning 1-darajasi");
         extraPercent1 = 10;
+        setUtil(extraPercent1);
       } else if (tui >= 35.0 && tui <= 35.9) {
         setObesity("semizlikning 2-darajasi");
         extraPercent1 = 15;
+        setUtil(extraPercent1);
       } else if (tui > 40.0) {
         extraPercent1 = 20;
+        
         setObesity("semizlikning 3-darajasi");
+      } else {
+        extraPercent1 = 0;
       }
-      setUtil(extraPercent1);
     }
   }, [tui]);
-  console.log(percent, "salom");
+
   useEffect(() => {
-    console.log("symptoms", percent);
-    if (percent >= 40) {
+    if (percent + util >= 39 && percent + util <= 40) {
       setSymptoms(`Sog'lom turmush tarziga rioya qiling`);
-      console.log(symptoms);
-    } else if (percent >= 41 && percent < 50) {
+      console.log("40");
+    }
+    if (percent + util >= 41 && percent + util < 50) {
       setSymptoms(
         `Parhez va jismoniy faollik (kuniga 5000 yoki 10000 qadam yurish)`
       );
-    } else if (percent >= 51 && percent < 60) {
+      console.log("41.50");
+    }
+    if (percent + util >= 51 && percent + util < 60) {
       setSymptoms(`Qon tahlili , hududdagi shifokor ko'ruvi `);
-    } else if (percent > 60) {
+      console.log("51.60");
+    }
+    if (percent + util > 60) {
       setSymptoms(`Endokrinolog ko'ruvi`);
+      console.log("60");
     } else {
-      console.log("symptoms oxiri");
     }
   }, [percent]);
 
@@ -139,7 +129,6 @@ function Diabet() {
     }
   }, [lname, fname, age, weight, gender, height]);
   const handleSubmit = () => {
-    console.log(percent, "percent submit ichidagi");
     const formData = {
       lname: lname,
       fname: fname,
@@ -152,20 +141,29 @@ function Diabet() {
     setData(formData);
 
     let extraPercent = 0;
-    if (heredity !== "now") {
-      extraPercent += 9;
-    }
-    if (heredity !== "yes") {
+
+    if (heredity === "now") {
       extraPercent += 0;
     }
+    if (heredity === "yes") {
+      extraPercent += 9;
+    }
+    console.log(gender);
     if (gender === "male") {
       extraPercent += 4;
     }
     if (gender === "female") {
       extraPercent += 2;
     }
+    let agePercent = 0;
+    if (age >= 40 && age < 65) {
+      agePercent = 6;
+    }
+    if (age > 65) {
+      agePercent = 10;
+    }
 
-    setPercent(percent + extraPercent);
+    setPercent(percent + extraPercent + agePercent);
     setWindow(true);
     setFname("");
     setLname("");
@@ -175,11 +173,7 @@ function Diabet() {
     setHeight("");
     setGender("");
   };
-  // useEffect(() => {
-  //   if (window === false) {
-  //
-  //   }
-  // }, []);
+
   return (
     <div>
       <div className="container">
@@ -272,8 +266,8 @@ function Diabet() {
               id=""
               value={heredity}
               onChange={handleHeredityChange}>
-              <option value="noooooooooooooow">Yo'q</option>
-              <option value="yeeeees">Ha</option>
+              <option value="now">Yo'q</option>
+              <option value="yes">Ha</option>
             </select>
           </div>
           <div className="diseases">
@@ -326,14 +320,16 @@ function Diabet() {
               <br />
               <h2>
                 Salom 👋🏻 {data.lname}. <br /> Sizda
-                {percent < 10 ? (
+                {percent + util < 40 ? (
                   <span>
                     oshqozon osti bezi insulin ishlab chiqarilishining buzilishi
-                    {percent + qwert + util}%
+                    {percent + util}% persent{percent}, util {util}
                   </span>
                 ) : (
                   <span>
-                    qandli diabetga chalinish ehtimoli {percent + qwert + util}%
+                    qandli diabetga chalinish ehtimoli {percent + util}%
+                    {console.log(symptoms)}
+                    persent{percent}, util {util}
                   </span>
                 )}
                 <br />
